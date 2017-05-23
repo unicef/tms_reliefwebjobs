@@ -20,7 +20,7 @@
                                                 );
                                 array_push($feed, $item);
                 }
-                $limit = 15;
+                $limit = 50;
                 for($x=0;$x<$limit;$x++) {
                                 echo '<item>';
                                 $title = str_replace("&", ' &amp; ', $feed[$x]['title']);

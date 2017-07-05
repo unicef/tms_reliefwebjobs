@@ -1,4 +1,4 @@
-<?php		
+<?php        
 		header('Content-type: text/xml');
  		echo '<?xml version="1.0" encoding="utf-8"?>';
 		echo'<channel xmlns:job="http://pageuppeople.com/">';
@@ -20,7 +20,7 @@
                                                 );
                                 array_push($feed, $item);
                 }
-                $limit = 50;
+                $limit = 25;
                 for($x=0;$x<$limit;$x++) {
                                 echo '<item>';
                                 $title = str_replace("&", ' &amp; ', $feed[$x]['title']);
@@ -35,7 +35,11 @@
 				$category = $feed[$x]['category'];
 				$category =  split('[|,]', $category); 
 				$field_job_experience = $feed[$x]['category'];
-				$field_job_experience = substr($field_job_experience, strrpos($field_job_experience, "Job Level|")+10);
+                
+                
+ $string =     $field_job_experience;  
+                preg_match("/\W*((?i)D-2|D-1|P-5|P-4|P-3|P-2|P-1|NO-4|NO-3|NO-2|NO-1|G-7|G-6|G-5|G-4|G-3|G-2|G-1|TC-4|TC-7|Consultancy|Internship(?-i))\W*/", $string,  $field_job_experience);
+                
 				$job_number = $feed[$x]['job_number'];
                                 $pubDate = date('c', strtotime($feed[$x]['pubDate']));
                                 $closeDate = date('c', strtotime($feed[$x]['closeDate']));
@@ -71,14 +75,28 @@
 				  if($values[0]==$findName)  
 				    echo '<field_career_categories>' .$values[1]. '</field_career_categories>';  
 				};
-				$csv = array_map('str_getcsv', file('job_levels.csv'));
-				$findName= $field_job_experience;
+				echo '<field_source>1979</field_source>';
+                $csv = array_map('str_getcsv', file('job_levels.csv'));
+    			$findName= $field_job_experience[1];
 				foreach($csv as $values)
 				{
 				  if($values[0]==$findName)  
 				    echo '<field_job_experience>' .$values[1]. '</field_job_experience>';  
 				};
-				echo '<field_source>1979</field_source>';
+                
+                if(substr_count($desc, '5 ans') > 0){
+     			echo '<field_job_experience>260</field_job_experience>';  ;
+				 }
+                 if(substr_count($desc, 'five years') > 0){
+         		echo '<field_job_experience>260</field_job_experience>';  ;
+				 }
+                   if(substr_count($desc, 'Five years') > 0){
+             	echo '<field_job_experience>260</field_job_experience>';  ;
+				 }
+                if(substr_count($desc, '10 years') > 0){
+             	echo '<field_job_experience>261</field_job_experience>';  ;
+				 }
+                 
 				$csv = array_map('str_getcsv', file('job_theme.csv'));
 				$findName= $category[1];
 				foreach($csv as $values)
